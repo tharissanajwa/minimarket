@@ -1,8 +1,12 @@
 package com.springboot.minimarket.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.List;
 
 @Entity
 @Table(name = "employees")
@@ -14,6 +18,10 @@ public class Employee extends BaseModel{
 
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "employee")
+    private List<Order> orders;
 
     public Employee() {
     }
