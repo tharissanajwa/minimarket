@@ -41,7 +41,7 @@ public class OrderResponse {
     private Boolean isPaid;
 
     @JsonProperty("payment")
-    private Payment payment;
+    private PaymentResponse paymentResponse;
 
     @JsonProperty("created_at")
     private Date createdAt;
@@ -55,16 +55,24 @@ public class OrderResponse {
         } else {
             this.memberName = order.getMember().getName();
         }
-        this.orderDetailsResponse = new ArrayList<>();
-        for (OrderDetail orderDetail : order.getOrderDetails()) {
-            OrderDetailResponse orderDetailResponse = new OrderDetailResponse(orderDetail);
-            orderDetailsResponse.add(orderDetailResponse);
+        if (order.getOrderDetails() == null) {
+            this.orderDetailsResponse = new ArrayList<>();
+        } else {
+            this.orderDetailsResponse = new ArrayList<>();
+            for (OrderDetail orderDetail : order.getOrderDetails()) {
+                OrderDetailResponse orderDetailResponse = new OrderDetailResponse(orderDetail);
+                orderDetailsResponse.add(orderDetailResponse);
+            }
         }
         this.totalItem = order.getTotalItem();
         this.totalAmount = order.getTotalAmount();
         this.pointObtained = order.getPointObtained();
         this.isPaid = order.getPaid();
-        this.payment = order.getPayment();
+        if (order.getPayment() == null) {
+            this.paymentResponse = null;
+        } else {
+            this.paymentResponse = new PaymentResponse(order.getPayment());
+        }
         this.createdAt = order.getCreatedAt();
     }
 }

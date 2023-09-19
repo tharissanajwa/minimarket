@@ -59,4 +59,12 @@ public class Member extends BaseModel {
     public void setPoint(Integer point) {
         this.point = point;
     }
+
+    public void addPoints(int point) {
+        this.point += point;
+    }
+
+    public void minusPoints(int point) {
+        this.point -= point;
+    }
 }
