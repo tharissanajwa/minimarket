@@ -144,6 +144,24 @@ public class ProductService {
         return result;
     }
 
+    // Metode untuk menambah stok barang melalui repository
+    public ProductResponse addQtyProduct(Long id, ProductRequest productRequest) {
+        ProductResponse response = null;
+        Product result = getProductById(id);
+        Integer qty = productRequest.getQty();
+
+        if (qty == null || qty <= 0) {
+            responseMessage = "Sorry, qty must be more than 0.";
+        } else if (result != null){
+            int currentQty = result.getQty() + qty;
+            result.setQty(currentQty);
+            productRepository.save(result);
+            response = new ProductResponse(result);
+            responseMessage = "Qty successfully added.";
+        }
+        return response;
+    }
+
     private String generateSkuProduct() {
         int getProduct = productRepository.findAll().size() + 1;
         return "PRD-"+getProduct;

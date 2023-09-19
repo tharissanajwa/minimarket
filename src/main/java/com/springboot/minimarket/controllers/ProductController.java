@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -75,6 +76,18 @@ public class ProductController {
         boolean valid = productService.deleteProduct(id);
         ApiResponse response = new ApiResponse(productService.getResponseMessage(), null);
         if (valid) {
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
+
+    // Metode untuk menambah stok barang dari fungsi yg telah dibuat di service
+    @PatchMapping("/{id}")
+    public ResponseEntity<ApiResponse> addQtyProduct(@PathVariable("id") Long id, @RequestBody ProductRequest productRequest) {
+        ProductResponse products = productService.addQtyProduct(id, productRequest);
+        ApiResponse response = new ApiResponse(productService.getResponseMessage(), products);
+        if (products != null) {
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
