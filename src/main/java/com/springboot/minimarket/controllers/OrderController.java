@@ -58,7 +58,7 @@ public class OrderController {
         }
     }
 
-    // Metode untuk menghapus penjualan berdasarkan dari fungsi yg telah dibuat di service
+    // Metode untuk menghapus penjualan berdasarkan id dari fungsi yg telah dibuat di service
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> disableOrder(@PathVariable("id") Long id) {
         boolean valid = orderService.deleteOrder(id);
@@ -76,6 +76,18 @@ public class OrderController {
         OrderDetailResponse orderDetails = orderService.addProductToOrder(id, orderDetailRequest);
         ApiResponse response = new ApiResponse(orderService.getResponseMessage(), orderDetails);
         if (orderDetails != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
+
+    // Metode untuk menghapus order detail berdasarkan id penjualan dari fungsi yg telah dibuat di service
+    @DeleteMapping("/{id}/details/{orderDetailId}")
+    public ResponseEntity<ApiResponse> disableOrderDetail(@PathVariable("id") Long id, @PathVariable("orderDetailId") Long orderDetailId) {
+        boolean valid = orderService.deleteOrderDetail(id, orderDetailId);
+        ApiResponse response = new ApiResponse(orderService.getResponseMessage(), null);
+        if (valid) {
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);

@@ -170,6 +170,38 @@ public class OrderService {
         return response;
     }
 
+    // Metode untuk menghapus data order detail secara hard delete melalui repository
+    public boolean deleteOrderDetail(Long id, Long detailOrderId) {
+        boolean result = false;
+        Order order = getOrderById(id);
+        if (validateDeleteOrderDetail(order, detailOrderId).isEmpty()) {
+            // Mengembalikan quantity product ke posisi sebelumnya
+            OrderDetail orderDetail = orderDetailRepository.findByIdAndOrderId(detailOrderId, id).get();
+            Long productId = orderDetail.getProduct().getId();
+            Product product = productService.getProductById(productId);
+            int currentQty = product.getQty() + orderDetail.getQty();
+            product.setQty(currentQty);
+            orderDetail.setProduct(product);
+            orderDetailRepository.save(orderDetail);
+            orderDetailRepository.deleteById(detailOrderId); // Menghapus detail order secara permanen
+            // Mengembalikan total item, total amount and point obtained ke posisi sebelumnya
+            int totalItem = order.getOrderDetails().size();
+            order.setTotalItem(totalItem);
+            int totalAmount = accumulateTotalAmount(order);
+            order.setTotalAmount(totalAmount);
+            if (order.getMember() != null) {
+                int pointObtained = totalAmount / 10;
+                order.setPointObtained(pointObtained);
+            }
+            orderRepository.save(order);
+            result = true;
+            responseMessage = Utility.message("data_deleted");
+        } else {
+            responseMessage = validateDeleteOrderDetail(order, detailOrderId);
+        }
+        return result;
+    }
+
     private String generateInvCode() {
         int getOrder = orderRepository.findAll().size() + 1;
         return "INV-"+getOrder;
@@ -211,6 +243,7 @@ public class OrderService {
         return message;
     }
 
+    // Metode untuk memvalidasi tambah product(order detail) ke order
     private String validateOrderDetailData(Long orderId, String skuProduct, int qty) {
         String result = "";
         Order order = getOrderById(orderId);
@@ -229,5 +262,20 @@ public class OrderService {
         }
 
         return result;
+    }
+
+    // Metode untuk validasi delete detail order
+    private String validateDeleteOrderDetail(Order order, Long detailOrderId) {
+        String message = "";
+        Optional<OrderDetail> orderDetail = orderDetailRepository.findByIdAndOrderId(detailOrderId, order.getId());
+
+        if (order == null) {
+            message = Utility.message("order_not_found");
+        } else if (order.getPaid()) {
+            message = "Sorry, order detail can't be deleted because order has been paid.";
+        } else if (!orderDetail.isPresent()) {
+            message = "Sorry, order detail can't be deleted because order detail is not found in this order.";
+        }
+        return message;
     }
 }

@@ -3,8 +3,8 @@ package com.springboot.minimarket.repositories;
 import com.springboot.minimarket.models.OrderDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> {
-    List<OrderDetail> getOrderDetailsByOrderIdAndDeletedAtIsNullOrderById(Long orderId);
+    Optional<OrderDetail> findByIdAndOrderId(Long id, Long orderId);
 }
