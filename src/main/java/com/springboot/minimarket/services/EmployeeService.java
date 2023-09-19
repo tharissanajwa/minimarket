@@ -130,9 +130,8 @@ public class EmployeeService {
             result = "Sorry, employee name cannot be blank.";
         }
         if (Utility.inputCheck(name) == 2) {
-            result = "Sorry, employee name can only filled by letters and numbers";
+            result = "Sorry, employee name can only filled by letters";
         }
-        System.out.println(Utility.phoneTrim(phoneNumber).length());
         if (Utility.inputCheck(phoneNumber) == 1) {
             result = "Sorry, employee phone cannot be blank.";
         } else if (!Utility.phoneTrim(phoneNumber).matches("^\\d+$") || !(Utility.phoneTrim(phoneNumber).length() >= 10 && Utility.phoneTrim(phoneNumber).length() <= 13)) {
