@@ -58,6 +58,17 @@ public class ProductService {
         return result.get();
     }
 
+    // Metode untuk mendapatkan data barang berdasarkan kode barang melalui repository
+    public Product getProductBySkuProduct(String skuProduct) {
+        Optional<Product> result = productRepository.findBySkuProductAndDeletedAtIsNull(skuProduct);
+        if (!result.isPresent()) {
+            responseMessage = Utility.message("product_not_found");
+            return null;
+        }
+        responseMessage = Utility.message("data_displayed");
+        return result.get();
+    }
+
     // Metode untuk mendapatkan data barang melalui response berdasarkan id melalui repository
     public ProductResponse getProductByIdResponse(Long id) {
         ProductResponse response = null;

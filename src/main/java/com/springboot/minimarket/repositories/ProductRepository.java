@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findAllByDeletedAtIsNullOrderByName(Pageable pageable);
     Optional<Product> findByIdAndDeletedAtIsNull(Long id);
+    Optional<Product> findBySkuProductAndDeletedAtIsNull(String skuProduct);
 }
