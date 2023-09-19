@@ -23,6 +23,17 @@ public class Utility {
         return inputTrim;
     }
 
+    // Metode untuk menghilangkan spasi berlebih untuk no telepon
+    public static String phoneTrim(String input) {
+        String inputTrim;
+        if (input == null) {
+            inputTrim = null;
+        } else {
+            inputTrim = input.trim().replaceAll("\\s+", "");
+        }
+        return inputTrim;
+    }
+
     // Metode untuk memberikan validasi inputan pengguna
     public static int inputCheck(String input) {
         int valid = 0;

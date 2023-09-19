@@ -51,10 +51,10 @@ public class ProductService {
     public Product getProductById(Long id) {
         Optional<Product> result = productRepository.findByIdAndDeletedAtIsNull(id);
         if (!result.isPresent()) {
-            responseMessage = "Sorry, id product is not found.";
+            responseMessage = Utility.message("product_not_found");
             return null;
         }
-        responseMessage = "Data successfully loaded.";
+        responseMessage = Utility.message("data_displayed");
         return result.get();
     }
 
@@ -134,18 +134,17 @@ public class ProductService {
     }
 
     private String generateSkuProduct() {
-        Integer getProduct = productRepository.findAll().size() + 1;
-        String sku = "PRD-"+getProduct;
-        return sku;
+        int getProduct = productRepository.findAll().size() + 1;
+        return "PRD-"+getProduct;
     }
 
     // Metode untuk memvalidasi inputan pengguna
     private String inputValidation(String name) {
         String result = "";
-        if (Utility.inputContainsNumber(Utility.inputTrim(name)) == 1) {
+        if (Utility.inputContainsNumber(name) == 1) {
             result = "Sorry, product name cannot be blank.";
         }
-        if (Utility.inputContainsNumber(Utility.inputTrim(name)) == 2) {
+        if (Utility.inputContainsNumber(name) == 2) {
             result = "Sorry, product name can only filled by letters and numbers";
         }
         return result;
