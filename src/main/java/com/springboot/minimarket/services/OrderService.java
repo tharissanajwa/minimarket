@@ -202,6 +202,48 @@ public class OrderService {
         return result;
     }
 
+    // Metode untuk mendapatkan total penjualan berdasarkan rentang waktu tertentu
+    public Page<OrderResponse> getAllOrderDateBetween(int page, int limit, Date startDate, Date endDate) {
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<Order> result = orderRepository.findByOrderDateBetweenAndIsPaidIsTrueAndDeletedAtIsNullOrderByOrderDateDesc(startDate, endDate, pageable);
+        List<OrderResponse> responses = new ArrayList<>();
+        if (result.isEmpty()) {
+            responseMessage = Utility.message("data_doesnt_exists");
+        } else {
+            int totalAmount = 0;
+            int netProfit = 0;
+            for (Order order : result.getContent()) {
+                OrderResponse orderResponse = new OrderResponse(order);
+                responses.add(orderResponse);
+                totalAmount += order.getTotalAmount();
+                netProfit += (order.getTotalAmount() - order.getPayment().getDiscount());
+            }
+            responseMessage = "Total sales from " + startDate + " to " + endDate + " are Rp. " + totalAmount + ". With net profit in Rp. " + netProfit + ".";
+        }
+        return new PageImpl<>(responses, PageRequest.of(page, limit), result.getTotalElements());
+    }
+
+    // Metode untuk mendapatkan total pembelian berdasarkan pelanggan dan rentang waktu tertentu
+    public Page<OrderResponse> getAllOrderByMemberAndDateBetween(int page, int limit, Long memberId, Date startDate, Date endDate) {
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<Order> result = orderRepository.findByMemberIdAndOrderDateBetweenAndIsPaidIsTrueAndDeletedAtIsNullOrderByOrderDateDesc(memberId, startDate, endDate, pageable);
+        List<OrderResponse> responses = new ArrayList<>();
+        if (result.isEmpty()) {
+            responseMessage = Utility.message("data_doesnt_exists");
+        } else {
+            int totalAmount = 0;
+            String memberName = "";
+            for (Order order : result.getContent()) {
+                OrderResponse orderResponse = new OrderResponse(order);
+                responses.add(orderResponse);
+                memberName = order.getMember().getName();
+                totalAmount += order.getTotalAmount();
+            }
+            responseMessage = "Total ordered " + memberName + " from " + startDate + " to " + endDate + " are Rp. " + totalAmount + ".";
+        }
+        return new PageImpl<>(responses, PageRequest.of(page, limit), result.getTotalElements());
+    }
+
     private String generateInvCode() {
         int getOrder = orderRepository.findAll().size() + 1;
         return "ORD-"+getOrder;

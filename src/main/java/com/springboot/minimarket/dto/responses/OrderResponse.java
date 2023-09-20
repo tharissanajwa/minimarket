@@ -43,7 +43,7 @@ public class OrderResponse {
     @JsonProperty("payment")
     private PaymentResponse paymentResponse;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Jakarta")
     @JsonProperty("order_date")
     private Date orderDate;
 

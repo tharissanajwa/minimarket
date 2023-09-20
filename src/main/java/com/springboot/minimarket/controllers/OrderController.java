@@ -8,6 +8,7 @@ import com.springboot.minimarket.models.ApiResponse;
 import com.springboot.minimarket.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Date;
 
 // Kelas ini bertindak sebagai controller untuk mengatur permintaan terkait penjualan
 @RestController
@@ -92,5 +95,21 @@ public class OrderController {
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
+    }
+
+    // Metode untuk mengambil semua data penjualan berdasarkan rentang waktu tertentu dari fungsi yg telah dibuat di service
+    @GetMapping("/date")
+    public ResponseEntity<ApiResponse> getAllOrderDateBetween(@RequestParam("page") int page, @RequestParam("limit") int limit, @RequestParam("start_date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate, @RequestParam("end_date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
+        Page<OrderResponse> orders = orderService.getAllOrderDateBetween(page, limit, startDate, endDate);
+        ApiResponse response = new ApiResponse(orderService.getResponseMessage(), orders);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    // Metode untuk mengambil semua data pembelian berdasarkan member dan rentang waktu tertentu dari fungsi yg telah dibuat di service
+    @GetMapping("/member/{memberId}")
+    public ResponseEntity<ApiResponse> getAllOrderByMemberAndDateBetween(@PathVariable("memberId") Long memberId, @RequestParam("page") int page, @RequestParam("limit") int limit, @RequestParam("start_date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate, @RequestParam("end_date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
+        Page<OrderResponse> orders = orderService.getAllOrderByMemberAndDateBetween(page, limit, memberId, startDate, endDate);
+        ApiResponse response = new ApiResponse(orderService.getResponseMessage(), orders);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
