@@ -182,11 +182,15 @@ public class ProductService {
     // Metode untuk memvalidasi inputan pengguna untuk harga (price)
     private String inputValidationInt(Integer price, Integer qty) {
         String result = "";
-        if (price < 0) {
-            result = "Sorry, price must be more than 0.";
-        }
-        if (qty < 0) {
-            result = "Sorry, qty must be more than 0.";
+        if (price == null || qty == null) {
+            result = "Sorry, field cannot be blank.";
+        } else {
+            if (price < 0) {
+                result = "Sorry, price must be more than 0.";
+            }
+            if (qty < 0) {
+                result = "Sorry, qty must be more than 0.";
+            }
         }
         return result;
     }
