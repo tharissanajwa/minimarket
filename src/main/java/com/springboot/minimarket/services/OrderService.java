@@ -4,6 +4,7 @@ import com.springboot.minimarket.dto.requests.OrderDetailRequest;
 import com.springboot.minimarket.dto.requests.OrderRequest;
 import com.springboot.minimarket.dto.responses.OrderDetailResponse;
 import com.springboot.minimarket.dto.responses.OrderResponse;
+import com.springboot.minimarket.dto.responses.Top3Response;
 import com.springboot.minimarket.models.Employee;
 import com.springboot.minimarket.models.Member;
 import com.springboot.minimarket.models.Order;
@@ -11,6 +12,7 @@ import com.springboot.minimarket.models.OrderDetail;
 import com.springboot.minimarket.models.Product;
 import com.springboot.minimarket.repositories.OrderDetailRepository;
 import com.springboot.minimarket.repositories.OrderRepository;
+import com.springboot.minimarket.repositories.ProductRepository;
 import com.springboot.minimarket.utilities.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,6 +33,9 @@ public class OrderService {
 
     @Autowired
     private OrderDetailRepository orderDetailRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @Autowired
     private MemberService memberService;
@@ -242,6 +247,22 @@ public class OrderService {
             responseMessage = "Total ordered " + memberName + " from " + startDate + " to " + endDate + " are Rp. " + totalAmount + ".";
         }
         return new PageImpl<>(responses, PageRequest.of(page, limit), result.getTotalElements());
+    }
+
+    // Metode untuk mendapatkan top 3 product yang sering dibeli
+    public List<Top3Response> getTop3Product() {
+        List<String> result = orderDetailRepository.getTop3Product();
+        List<Top3Response> responses = new ArrayList<>();
+        if (result.isEmpty()) {
+            responseMessage = Utility.message("data_doesnt_exists");
+        } else {
+            for (String order : result) {
+                Top3Response orderResponse = new Top3Response(order.toString());
+                responses.add(orderResponse);
+            }
+            responseMessage = "Top 3 product";
+        }
+        return responses;
     }
 
     private String generateInvCode() {
