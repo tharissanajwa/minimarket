@@ -8,7 +8,7 @@ public class ProductResponse {
     @JsonProperty("id")
     private Long id;
 
-    @JsonProperty("sku_prod")
+    @JsonProperty("sku_product")
     private String skuProduct;
 
     @JsonProperty("name")

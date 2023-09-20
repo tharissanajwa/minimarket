@@ -136,7 +136,7 @@ public class OrderService {
         Integer qty = orderDetailRequest.getQty();
         Integer discount = orderDetailRequest.getDiscount();
 
-        if (validateOrderDetailData(orderId, skuProduct, qty).isEmpty()) {
+        if (validateOrderDetailData(orderId, skuProduct, qty, discount).isEmpty()) {
             Product product = productService.getProductBySkuProduct(skuProduct);
             int price = product.getPrice();
             int total = (price - discount) * qty;
@@ -164,7 +164,7 @@ public class OrderService {
             responseMessage = Utility.message("data_added");
             orderRepository.save(order);
         } else {
-            responseMessage = validateOrderDetailData(orderId, skuProduct, qty);
+            responseMessage = validateOrderDetailData(orderId, skuProduct, qty, discount);
         }
 
         return response;
@@ -204,7 +204,7 @@ public class OrderService {
 
     private String generateInvCode() {
         int getOrder = orderRepository.findAll().size() + 1;
-        return "INV-"+getOrder;
+        return "ORD-"+getOrder;
     }
 
     // Metode untuk menghitung total pesanan yang harus dibayarkan
@@ -244,7 +244,7 @@ public class OrderService {
     }
 
     // Metode untuk memvalidasi tambah product(order detail) ke order
-    private String validateOrderDetailData(Long orderId, String skuProduct, int qty) {
+    private String validateOrderDetailData(Long orderId, String skuProduct, Integer qty, Integer discount) {
         String result = "";
         Order order = getOrderById(orderId);
         Product product = productService.getProductBySkuProduct(skuProduct);
@@ -253,6 +253,10 @@ public class OrderService {
             result = "Sorry, order with ID " + orderId + " doesn't exist.";
         } else if (product == null) {
             result = "Sorry, product with SKU " + skuProduct + " doesn't exist.";
+        } else if (discount == null) {
+            result = "Sorry, discount cannot be blank.";
+        } else if (qty == null) {
+            result = "Sorry, quantity cannot be blank.";
         } else if (qty < 1) {
             result = "Sorry, quantity must be positive number.";
         } else if (product.getQty() < qty) {

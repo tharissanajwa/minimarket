@@ -35,6 +35,15 @@ public class OrderDetail extends BaseModel {
     public OrderDetail() {
     }
 
+    public OrderDetail(Order order, Product product, Integer qty, Integer price, Integer discount, Integer total) {
+        this.order = order;
+        this.product = product;
+        this.qty = qty;
+        this.price = price;
+        this.discount = discount;
+        this.total = total;
+    }
+
     public Order getOrder() {
         return order;
     }

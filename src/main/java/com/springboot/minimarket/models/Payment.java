@@ -34,6 +34,15 @@ public class Payment extends BaseModel {
     public Payment() {
     }
 
+    public Payment(Order order, Integer totalAmount, Integer pointUsed, Integer discount, Integer totalPaid, Integer change) {
+        this.order = order;
+        this.totalAmount = totalAmount;
+        this.pointUsed = pointUsed;
+        this.discount = discount;
+        this.totalPaid = totalPaid;
+        this.change = change;
+    }
+
     @JsonIgnore
     public Order getOrder() {
         return order;

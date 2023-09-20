@@ -1,10 +1,10 @@
 package com.springboot.minimarket.dto.responses;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.springboot.minimarket.models.Order;
 import com.springboot.minimarket.models.OrderDetail;
-import com.springboot.minimarket.models.Payment;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,8 +43,9 @@ public class OrderResponse {
     @JsonProperty("payment")
     private PaymentResponse paymentResponse;
 
-    @JsonProperty("created_at")
-    private Date createdAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonProperty("order_date")
+    private Date orderDate;
 
     public OrderResponse(Order order) {
         this.id = order.getId();
@@ -73,6 +74,6 @@ public class OrderResponse {
         } else {
             this.paymentResponse = new PaymentResponse(order.getPayment());
         }
-        this.createdAt = order.getCreatedAt();
+        this.orderDate = order.getOrderDate();
     }
 }

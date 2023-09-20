@@ -31,6 +31,14 @@ public class Product extends BaseModel{
     public Product() {
     }
 
+    public Product(String skuProduct, String name, Integer price, String description, Integer qty) {
+        this.skuProduct = skuProduct;
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.qty = qty;
+    }
+
     public String getSkuProduct() {
         return skuProduct;
     }

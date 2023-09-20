@@ -7,6 +7,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -42,7 +43,21 @@ public class Order extends BaseModel {
     @OneToOne(mappedBy = "order")
     private Payment payment;
 
+    @Column(name = "order_date", columnDefinition = "DATE DEFAULT CURRENT_DATE")
+    private Date orderDate = new Date();
+
     public Order() {
+    }
+
+    public Order(String invCode, Employee employee, Member member, Integer totalItem, Integer totalAmount, Integer pointObtained, Boolean isPaid, Date orderDate) {
+        this.invCode = invCode;
+        this.employee = employee;
+        this.member = member;
+        this.totalItem = totalItem;
+        this.totalAmount = totalAmount;
+        this.pointObtained = pointObtained;
+        this.isPaid = isPaid;
+        this.orderDate = orderDate;
     }
 
     public String getInvCode() {
@@ -115,5 +130,13 @@ public class Order extends BaseModel {
 
     public void setPayment(Payment payment) {
         this.payment = payment;
+    }
+
+    public Date getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(Date orderDate) {
+        this.orderDate = orderDate;
     }
 }

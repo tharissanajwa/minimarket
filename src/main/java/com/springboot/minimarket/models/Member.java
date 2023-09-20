@@ -28,6 +28,12 @@ public class Member extends BaseModel {
     public Member() {
     }
 
+    public Member(String name, String address, String phoneNumber) {
+        this.name = name;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+    }
+
     public String getName() {
         return name;
     }
