@@ -3,19 +3,17 @@ package com.springboot.minimarket.seeders;
 import com.springboot.minimarket.models.Employee;
 import com.springboot.minimarket.repositories.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Component
+@Service
 public class EmployeeSeeder {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    @PostConstruct
     public void seed() {
         // Daftar pegawai yang akan disimpan dalam database
         List<Employee> employees = new ArrayList<>(Arrays.asList(

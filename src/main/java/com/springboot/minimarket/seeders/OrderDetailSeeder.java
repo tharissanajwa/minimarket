@@ -5,14 +5,13 @@ import com.springboot.minimarket.repositories.OrderDetailRepository;
 import com.springboot.minimarket.services.OrderService;
 import com.springboot.minimarket.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Component
+@Service
 public class OrderDetailSeeder {
     @Autowired
     private OrderDetailRepository orderDetailRepository;
@@ -23,7 +22,6 @@ public class OrderDetailSeeder {
     @Autowired
     private ProductService productService;
 
-    @PostConstruct
     public void seed() {
         // Daftar order detail yang akan disimpan dalam database
         List<OrderDetail> orderDetails = new ArrayList<>(Arrays.asList(
@@ -83,9 +81,7 @@ public class OrderDetailSeeder {
         // Cek apakah database sudah berisi data order detail atau tidak
         if (orderDetailRepository.findAll().isEmpty()) {
             // Jika tidak ada data, maka simpan data order detail ke dalam database
-            if (orderService.getOrderById(1L) != null) {
-                orderDetailRepository.saveAll(orderDetails);
-            }
+            orderDetailRepository.saveAll(orderDetails);
         }
     }
 }

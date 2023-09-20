@@ -5,15 +5,14 @@ import com.springboot.minimarket.repositories.OrderRepository;
 import com.springboot.minimarket.services.EmployeeService;
 import com.springboot.minimarket.services.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-@Component
+@Service
 public class OrderSeeder {
     @Autowired
     private OrderRepository orderRepository;
@@ -24,7 +23,6 @@ public class OrderSeeder {
     @Autowired
     private MemberService memberService;
 
-    @PostConstruct
     public void seed() {
         // Daftar penjualan yang akan disimpan dalam database
         List<Order> orders = new ArrayList<>(Arrays.asList(

@@ -7,14 +7,13 @@ import com.springboot.minimarket.repositories.PaymentRepository;
 import com.springboot.minimarket.services.MemberService;
 import com.springboot.minimarket.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Component
+@Service
 public class PaymentSeeder {
     @Autowired
     private PaymentRepository paymentRepository;
@@ -28,7 +27,6 @@ public class PaymentSeeder {
     @Autowired
     private MemberService memberService;
 
-    @PostConstruct
     public void seed() {
         // Daftar pembayaran yang akan disimpan dalam database
         List<Payment> payments = new ArrayList<>(Arrays.asList(

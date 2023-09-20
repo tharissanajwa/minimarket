@@ -3,19 +3,17 @@ package com.springboot.minimarket.seeders;
 import com.springboot.minimarket.models.Product;
 import com.springboot.minimarket.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Component
+@Service
 public class ProductSeeder {
     @Autowired
     private ProductRepository productRepository;
 
-    @PostConstruct
     public void seed() {
         // Daftar barang yang akan disimpan dalam database
         List<Product> products = new ArrayList<>(Arrays.asList(
