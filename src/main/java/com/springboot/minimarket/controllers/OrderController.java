@@ -4,7 +4,8 @@ import com.springboot.minimarket.dto.requests.OrderDetailRequest;
 import com.springboot.minimarket.dto.requests.OrderRequest;
 import com.springboot.minimarket.dto.responses.OrderDetailResponse;
 import com.springboot.minimarket.dto.responses.OrderResponse;
-import com.springboot.minimarket.dto.responses.Top3Response;
+import com.springboot.minimarket.dto.responses.FindProductBoughtTogetherResponse;
+import com.springboot.minimarket.dto.responses.FindTop3ProductResponse;
 import com.springboot.minimarket.models.ApiResponse;
 import com.springboot.minimarket.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,7 +119,15 @@ public class OrderController {
     // Metode untuk mengambil top 3 product yang sering dibeli
     @GetMapping("/products")
     public ResponseEntity<ApiResponse> getTop3Product() {
-        List<Top3Response> orders = orderService.getTop3Product();
+        List<FindTop3ProductResponse> orders = orderService.getTop3Product();
+        ApiResponse response = new ApiResponse(orderService.getResponseMessage(), orders);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    // Metode untuk mendapatkan produk lain yg dibeli bersamaan dengan produk tersebut
+    @GetMapping("/products/{id}")
+    public ResponseEntity<ApiResponse> getProductBoughtTogetherByProductId(@PathVariable("id") Long productId) {
+        List<FindProductBoughtTogetherResponse> orders = orderService.getProductBoughtTogetherByProductId(productId);
         ApiResponse response = new ApiResponse(orderService.getResponseMessage(), orders);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

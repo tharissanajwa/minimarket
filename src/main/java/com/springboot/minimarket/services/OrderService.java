@@ -4,7 +4,8 @@ import com.springboot.minimarket.dto.requests.OrderDetailRequest;
 import com.springboot.minimarket.dto.requests.OrderRequest;
 import com.springboot.minimarket.dto.responses.OrderDetailResponse;
 import com.springboot.minimarket.dto.responses.OrderResponse;
-import com.springboot.minimarket.dto.responses.Top3Response;
+import com.springboot.minimarket.dto.responses.FindProductBoughtTogetherResponse;
+import com.springboot.minimarket.dto.responses.FindTop3ProductResponse;
 import com.springboot.minimarket.models.Employee;
 import com.springboot.minimarket.models.Member;
 import com.springboot.minimarket.models.Order;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -250,17 +252,36 @@ public class OrderService {
     }
 
     // Metode untuk mendapatkan top 3 product yang sering dibeli
-    public List<Top3Response> getTop3Product() {
+    public List<FindTop3ProductResponse> getTop3Product() {
         List<String> result = orderDetailRepository.getTop3Product();
-        List<Top3Response> responses = new ArrayList<>();
+        List<FindTop3ProductResponse> responses = new ArrayList<>();
         if (result.isEmpty()) {
             responseMessage = Utility.message("data_doesnt_exists");
         } else {
             for (String order : result) {
-                Top3Response orderResponse = new Top3Response(order.toString());
+                FindTop3ProductResponse orderResponse = new FindTop3ProductResponse(order.toString());
                 responses.add(orderResponse);
             }
             responseMessage = "Top 3 product";
+        }
+        return responses;
+    }
+
+    // Metode untuk mendapatkan produk lain yg dibeli bersamaan dengan produk tersebut
+    public List<FindProductBoughtTogetherResponse> getProductBoughtTogetherByProductId(Long productId) {
+        String result = orderDetailRepository.getProductBoughtTogetherByProductId(productId);
+        List<FindProductBoughtTogetherResponse> responses = new ArrayList<>();
+        if (result.isEmpty()) {
+            responseMessage = Utility.message("data_doesnt_exists");
+        } else {
+            List<String> array = Arrays.asList(result.split(","));
+            String productName = productService.getProductById(Long.valueOf(array.get(0))).getName();
+            String productBoughtTogether1 = productService.getProductById(Long.valueOf(array.get(1))).getName();
+            String productBoughtTogether2 = productService.getProductById(Long.valueOf(array.get(2))).getName();
+
+            FindProductBoughtTogetherResponse orderResponse = new FindProductBoughtTogetherResponse(productName, productBoughtTogether1, productBoughtTogether2);
+            responses.add(orderResponse);
+            responseMessage = "Get product bought together";
         }
         return responses;
     }
