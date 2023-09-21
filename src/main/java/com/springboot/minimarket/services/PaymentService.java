@@ -179,7 +179,6 @@ public class PaymentService {
         } else {
             discount = 0;
         }
-
         return discount;
     }
 
