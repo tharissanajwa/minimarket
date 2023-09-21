@@ -259,10 +259,10 @@ public class OrderService {
             responseMessage = Utility.message("data_doesnt_exists");
         } else {
             for (String order : result) {
-                FindTop3ProductResponse orderResponse = new FindTop3ProductResponse(order.toString());
-                responses.add(orderResponse);
+                FindTop3ProductResponse top3ProductResponse = new FindTop3ProductResponse(order.toString());
+                responses.add(top3ProductResponse);
             }
-            responseMessage = "Top 3 product";
+            responseMessage = "Get Top 3 product";
         }
         return responses;
     }
@@ -279,8 +279,8 @@ public class OrderService {
             String productBoughtTogether1 = productService.getProductById(Long.valueOf(array.get(1))).getName();
             String productBoughtTogether2 = productService.getProductById(Long.valueOf(array.get(2))).getName();
 
-            FindProductBoughtTogetherResponse orderResponse = new FindProductBoughtTogetherResponse(productName, productBoughtTogether1, productBoughtTogether2);
-            responses.add(orderResponse);
+            FindProductBoughtTogetherResponse findProductBoughtTogetherResponse = new FindProductBoughtTogetherResponse(productName, productBoughtTogether1, productBoughtTogether2);
+            responses.add(findProductBoughtTogetherResponse);
             responseMessage = "Get product bought together";
         }
         return responses;
@@ -312,7 +312,6 @@ public class OrderService {
         }
         return result;
     }
-
 
     // Metode untuk validasi delete order
     private String validateDeleteOrder(Order order) {
