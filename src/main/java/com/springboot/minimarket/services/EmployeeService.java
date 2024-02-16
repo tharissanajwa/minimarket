@@ -1,7 +1,5 @@
 package com.springboot.minimarket.services;
 
-import com.springboot.minimarket.dto.requests.EmployeeRequest;
-import com.springboot.minimarket.dto.responses.EmployeeResponse;
 import com.springboot.minimarket.models.Employee;
 import com.springboot.minimarket.repositories.EmployeeRepository;
 import com.springboot.minimarket.utilities.Utility;
@@ -67,8 +65,7 @@ public class EmployeeService {
     }
 
     // Metode untuk memperbarui informasi pegawai melalui repository
-    public EmployeeResponse updateEmployee(Long id, EmployeeRequest employeeRequest) {
-        EmployeeResponse response = null;
+    public Employee updateEmployee(Long id, Employee employeeRequest) {
         Employee result = getEmployeeById(id);
         String name = Utility.inputTrim(employeeRequest.getName());
         String address = Utility.inputTrim(employeeRequest.getAddress());
@@ -81,10 +78,9 @@ public class EmployeeService {
             result.setAddress(address);
             result.setPhoneNumber(Utility.phoneTrim(phoneNumber));
             employeeRepository.save(result);
-            response = new EmployeeResponse(result);
             responseMessage = Utility.message("data_updated");
         }
-        return response;
+        return result;
     }
 
     // Metode untuk menghapus data pegawai secara soft delete melalui repository
